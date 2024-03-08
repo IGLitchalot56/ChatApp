@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Simple Text app</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  <script>
+ var socket = new WebSocket("wss://therealgaston.glitch.me");
+  
+    socket.addEventListener('open', function (event) {
+      console.log('WebSocket connected');
+    });
+  
+    socket.addEventListener('message', function (event) {
+      var chatBox = document.getElementById('chat-box');
+      chatBox.innerHTML += '<p>' + event.data + '</p>';
+    });
+  
+    function sendMessage() {
+  var messageInput = document.getElementById('message-input');
+  var message = messageInput.value.trim(); // Trim to remove leading and trailing whitespaces
+
+  // Check if the message is not empty before sending
+  if (message !== '') {
+    // Send the message to the server directly as a string
+    socket.send(message);
+
+    // Clear the message input
+    messageInput.value = '';
+  }
+}
+  </script>
+  <style>
+    /* Remove the navbar's default margin-bottom and rounded borders */
+    .navbar {
+      margin-bottom: 0;
+      border-radius: 0;
+    }
+
+    /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+    .row.content {
+      min-height: calc(100vh - 70px); /* Adjust the value to leave space for the footer */
+      margin-bottom: 20px; /* Add bottom margin to create space between content and footer */
+    }
+
+    /* Set gray background color and 100% height */
+    .sidenav {
+      padding-top: 20px;
+      background-color: #f1f1f1;
+      height: 100%;
+    }
+
+    /* Set black background color, white text, some padding, and rounded corners */
+    footer {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      background-color: #555;
+      color: white;
+      padding: 15px;
+      border-radius: 10px; /* Add rounded corners */
+      box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5); /* Add a subtle shadow */
+    }
+
+    /* Style the textarea to fill the entire footer */
+    footer textarea {
+      width: 100%;
+      height: calc(100% - 40px); /* Adjust the height to leave space for the button */
+      box-sizing: border-box;
+      resize: none; /* Disable textarea resizing */
+      border: none; /* Remove textarea border */
+      background-color: inherit; /* Inherit the background color of the footer */
+      color: inherit; /* Inherit the text color of the footer */
+      font-size: inherit; /* Inherit the font size of the footer */
+    }
+
+    /* Style the button */
+    footer button {
+      width: 100%;
+      height: 40px; /* Adjust the height as needed */
+      background-color: #4CAF50; /* Green background color */
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    /* On small screens, set height to 'auto' for sidenav and grid */
+    @media screen and (max-width: 767px) {
+      .sidenav {
+        height: auto;
+        padding: 15px;
+      }
+      .row.content {
+        height: auto;
+        margin-bottom: 20px;
+      }
+    }
+
+    /* Style the smaller jumbotron */
+    .jumbotron {
+      background-color: #555;
+      color: white;
+      padding: 12px 12px; /* Adjusted padding */
+      margin-bottom: 0;
+    }
+
+    /* Style the chat box to show messages */
+    #chat-box {
+      max-height: 300px; /* Adjust as needed */
+      overflow-y: scroll;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="jumbotron">
+    <center><h1>Welcome to My Chat App</h1></center>
+  </div>
+
+  <div id="chat-box"></div>
+
+  <footer class="container-fluid text-center">
+    <textarea id="message-input" rows="4" placeholder="Enter your text here..."></textarea>
+    <button onclick="sendMessage()">Send</button>
+  </footer>
+</body>
+
+</html>
